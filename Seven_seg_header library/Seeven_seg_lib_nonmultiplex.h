@@ -1,7 +1,6 @@
-#include <TimerOne.h>
-
 #define SegType1 'A'
 #define SegType2 'C'
+
 
 class Segment{
 	private:
