@@ -1,3 +1,28 @@
+/*
+                        A
+                    =========                           
+                    =       =
+                  F =       =  B
+                    =   G   =
+                    =========
+                    =       =
+                  E =       =  C
+                    =       =
+                    ========= # decimal point 
+                        D
+
+                    G-F-Com-A-B   
+                    ===========                           
+                    =         =
+                    =         =
+                    =         =     //8 pins 
+                    ===========
+                    =         =
+                    =         =
+                    =         =
+                    =========== #
+                    E-D-Com-C-Dp   
+*/
 #define SegType1 'A'
 #define SegType2 'C'
 
