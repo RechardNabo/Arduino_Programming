@@ -27,9 +27,11 @@
 #define LED2 0x05
 #define LED3 0x06
 #define LED4 0x07
-const byte IR_Receiver = 2;
+#define IR_Receiver 0x02
+
 decode_results results;
 IRrecv IrRecv(IR_Receiver);
+volatile byte state = 0x00;
 
 void setup() {
   Serial.begin(9600);
@@ -39,36 +41,75 @@ void setup() {
   pinMode(LED2,OUTPUT);
   pinMode(LED3,OUTPUT);
   pinMode(LED4,OUTPUT);
+  pinMode(IR_Receiver,INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(IR_Receiver), Interupt, FALLING );
 
 }
 
 void loop() {
+  Serial.println(digitalRead("pin value = "+IR_Receiver));
+  Serial.println("state = "+String(state));
   //decode_results results;
   int skip = 4294967295;
   if(IrRecv.decode(&results)){
     int data = results.value;
     if(data != skip){
-      Serial.println(results.value,HEX);
-      if(data == int(0xFF30CF)){
+      switch(data){
+        case int(0xFF30CF):
           digitalWrite(LED1,HIGH);
-        }
-       if(data == int(0xFF18E7)){
+          break;
+        case int(0xFF18E7):
           digitalWrite(LED2,HIGH);
-        }
-       if(data == int(0xFF7A85)){
+          break;
+        case int(0xFF7A85):
           digitalWrite(LED3,HIGH);
-        }
-       if(data == int(0xFF10EF)){
+          break;
+        case int(0xFF10EF):
           digitalWrite(LED4,HIGH);
-        }
-       if(data == int(0XFF6897)){
+          break;
+        case int(0XFF6897):
           digitalWrite(LED1,LOW);
           digitalWrite(LED2,LOW);
           digitalWrite(LED3,LOW);
           digitalWrite(LED4,LOW);
+          break;
+        case int(0xFF38C7):
+          RunLED();
+          break;
         }
-       
       }
       IrRecv.resume();  
     }
+}
+
+void RunLED(){
+        while(true){
+         Serial.println("state = "+String(state));
+        if(state == 0x01){break;}
+        digitalWrite(LED1,HIGH);
+        digitalWrite(LED2,LOW);
+        digitalWrite(LED3,LOW);
+        digitalWrite(LED4,LOW);
+        delay(100);
+        digitalWrite(LED1,LOW);
+        digitalWrite(LED2,HIGH);
+        digitalWrite(LED3,LOW);
+        digitalWrite(LED4,LOW);
+        delay(100);
+        digitalWrite(LED1,LOW);
+        digitalWrite(LED2,LOW);
+        digitalWrite(LED3,HIGH);
+        digitalWrite(LED4,LOW);
+        delay(100);
+        digitalWrite(LED1,LOW);
+        digitalWrite(LED2,LOW);
+        digitalWrite(LED3,LOW);
+        digitalWrite(LED4,HIGH);
+        delay(100);  
+          }  
+  }
+
+  void Interupt() {
+  state = !state;
+  
 }
