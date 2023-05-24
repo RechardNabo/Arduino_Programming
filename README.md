@@ -1,2 +1,3 @@
 # Arduino_Programming
-c/c++ programming and app projects targeting arduino mega 2560
+ATmel Microcontroller Programming Procedure. Embedded C language language (Arduino IDE, Fritzing & Proteus 8)
+projects targeting arduino mega 2560
